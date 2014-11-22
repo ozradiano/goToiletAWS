@@ -207,7 +207,7 @@ public class dbManager {
 				java.util.Random rans = new Random();
 				nextEventIdForReal = rans.nextInt(99999);
 			} else {
-				nextEventIdForReal = nextEventId.getInt("Total") * 2 + 1;
+				nextEventIdForReal = nextEventId.getInt("Total") + 1;
 			}
 			selectUsersStatement.close();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:00");

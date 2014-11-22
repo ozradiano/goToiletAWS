@@ -9,7 +9,7 @@ and open the template in the editor.
         <title>SERVER TEST</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <script src="jquery.js"></script>
+        <script src="js/libs/jquery/jquery.js"></script>
 
         <script>
             function postToServer() {
@@ -17,7 +17,7 @@ and open the template in the editor.
                 data = {
                 }
                 $.ajax({
-                    url: "http://54.171.61.156/getTime",
+                    url: "http://gotoiletapp.com/getTime",
                     method: 'POST',
                     data: JSON.stringify(data),
                     success: function(resData) {

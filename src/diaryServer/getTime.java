@@ -11,11 +11,11 @@ import org.json.JSONWriter;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.net.ntp.NTPUDPClient;
 import org.apache.commons.net.ntp.TimeInfo;
-import org.apache.commons.net.time.TimeTCPClient;
 
 public class getTime extends HttpServlet {
 
@@ -27,18 +27,15 @@ public class getTime extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		logic(resp);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		logic(resp);
 	}
 
-	@SuppressWarnings("deprecation")
 	private void logic(HttpServletResponse response) {
 		System.out.println("hi");
 		/**
@@ -78,49 +75,32 @@ public class getTime extends HttpServlet {
 		try {
 			inetAddress = InetAddress.getByName(TIME_SERVER);
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		TimeInfo timeInfo = null;
 		try {
 			timeInfo = timeClient.getTime(inetAddress);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		long returnTime = timeInfo.getMessage().getTransmitTimeStamp().getTime();
-		Date time = new Date(returnTime);
-
+		Date dateTime = new Date(returnTime);
 
 		JSONWriter writer = null;
 		try {
 			writer = new JSONWriter(response.getWriter());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		writer.object();
 
-		writer.key("time");
-		writer.value(time.toGMTString());
+		SimpleDateFormat newTimeFormat = new SimpleDateFormat("HH:MM");
+		SimpleDateFormat newDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+		
+		writer.key("date");
+		writer.value(newDateFormat.format(dateTime));
+		writer.key("hour");
+		writer.value(newTimeFormat.format(dateTime));
 		writer.endObject();
-	}
-
-	private String convertDate(String hour, String minute, String secs,
-			String day, String month, String year) {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(day);
-		sb.append(".");
-		sb.append(month);
-		sb.append(".");
-		sb.append(year);
-		sb.append(" ");
-		sb.append(hour);
-		sb.append(":");
-		sb.append(minute);
-		sb.append(" ");
-		String res = sb.toString();
-		return res;
 	}
 }
