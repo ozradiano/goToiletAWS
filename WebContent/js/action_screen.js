@@ -4,28 +4,8 @@
  * and open the template in the editor.
  */
 
-var QueryString = function() {
-    // This function is anonymous, is executed immediately and 
-    // the return value is assigned to QueryString!
-    var query_string = {};
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
-    for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split("=");
-        // If first entry with this name
-        if (typeof query_string[pair[0]] === "undefined") {
-            query_string[pair[0]] = pair[1];
-            // If second entry with this name
-        } else if (typeof query_string[pair[0]] === "string") {
-            var arr = [query_string[pair[0]], pair[1]];
-            query_string[pair[0]] = arr;
-            // If third or later entry with this name
-        } else {
-            query_string[pair[0]].push(pair[1]);
-        }
-    }
-    return query_string;
-}();
+
+
 
 var UID = 0;
 var KIDID = 0;
@@ -46,6 +26,30 @@ formValues["radio-lift-pants"] = "fullHelp";
 formValues["radio-flush"] = "fullHelp";
 formValues["radio-wash-hands"] = "fullHelp";
 formValues["radio-wipe-hands"] = "fullHelp";
+
+
+function getTime() {
+    $.ajax({
+        url: SERVER_URL + "/getTime",
+        method: 'GET',
+        success: function(resData) {
+            fixTime(resData);
+        },
+        error: function() {
+            alert("server error");
+        }
+    });
+}
+
+
+function fixTime(resData) {
+    var data = JSON.parse(resData);
+    var time = data.time;
+    var date = data.date;
+    
+    $("#currentTime").val(time);
+    $("#currentDate").val(date);
+}
 
 function buildJSONObject() {
     var obj = {
@@ -75,6 +79,7 @@ function buildJSONObject() {
 
 
 $(document).ready(function() {
+    getTime();
     $("#my-menu").mmenu();
     document.body.style = "height: " + $(document).height();
     +"px";
@@ -84,6 +89,7 @@ $(document).ready(function() {
 
 
     function fixElementsApperance() {
+        
         $("#profilePicture").width($("#profilePicture").height());
         $(".time_box").css("margin-top", "-" + ($(".time_box").height() / 2) + "px");
         $(".burger_btn").width($(".burger_btn").height() * 1.91);

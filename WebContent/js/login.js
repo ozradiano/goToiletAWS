@@ -4,14 +4,10 @@
  * and open the template in the editor.
  */
 
-function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires;
-}
+
    
 $(document).ready(function() {
+    deleteCookies();
     document.body.style = "height: " + $(document).height();
     +"px";
     $(window).on('resize', fixElementsApperance);
@@ -24,6 +20,9 @@ $(document).ready(function() {
         $(".burger_btn").css("margin-top", "-" + ($(".burger_btn").height() / 2) + "px");
         $(".login_box").css("margin-top", "-" + ($(".login_box").height() / 1.5) + "px");
         $(".login_box").css("margin-right", "-" + ($(".login_box").width() / 2) + "px");
+        
+        $(".spinner").css("margin-top", "-" + ($(".spinner").height() / 2) + "px");
+        $(".spinner").css("margin-left", "-" + ($(".spinner").width() / 2) + "px");
     }
     
     fixElementsApperance();
@@ -45,7 +44,7 @@ $(document).ready(function() {
                 onGetDataFromServer(resData);
             },
             error: function() {
-                document.getElementById("loader").style.fontSize = "none";
+                document.getElementById("loader").style.display = "none";
                 alert("server error");
             }
         });
@@ -57,8 +56,8 @@ $(document).ready(function() {
         if (data.type == 0 || data.type == "0") {
              document.getElementById("errorLabel").style.display = "";
         } else {
-            setCookie("userid", data.userID);
-            setCookie("type", data.type);
+            setCookie("userid", data.userID, 365);
+            setCookie("type", data.type, 365);
 
             if (data.type == 1 || data.type == "1" ) {
                 window.location = SERVER_URL + "/main.html";
