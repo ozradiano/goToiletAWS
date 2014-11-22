@@ -1,6 +1,6 @@
 package diaryServer;
 
-import enums.ELoginStatus;
+import enums.ELoginStatus; 
 
 
 public class loginReturnData {
