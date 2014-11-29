@@ -3,15 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+checkCookieForRedirect();
+
 var kidTemplate = '<img src="[IMG_SRC]" class="profile_picture v_align background_cover"/>' +
         '<div class="profile_name v_align">[NAME_OF_CHILD]</div>';
 
-var UID = -1;
-var userType = -1;
+var childrenData = null;
 
-
-
-function getChildren() {
+function getChildrenData() {
     var data = {
         userId: UID
     };
@@ -20,7 +19,7 @@ function getChildren() {
         method: 'POST',
         data: JSON.stringify(data),
         success: function(resData) {
-            addChildrenToPage(resData);
+            childrenData = JSON.parse(resData);
         },
         error: function() {
             alert("server error");
@@ -34,19 +33,22 @@ function fixElementsApperance() {
     $(".burger_btn").css("margin-top", "-" + ($(".burger_btn").height() / 2) + "px");
     $(".profile_picture").css("margin-top", "-" + ($(".profile_picture").height() / 2) + "px");
     $(".profile_name").css("margin-top", "-" + ($(".profile_name").height() / 2) + "px");
-    $(".profile_name").css("right", (Math.ceil($(".profile_picture").width() * 1.7)) + "px");
-
+    //$(".profile_name").css("right", (Math.ceil($(".profile_picture").css('right'); * 1.7)) + "px");
 }
 
-function addChildrenToPage(resData) {
-    var data = JSON.parse(resData);
-    var gardenName = data.name;
+function addChildrenToPage() {
+    if (childrenData == null) {
+         setTimeput("addChildrenToPage()",1000); 
+         return;
+    }
+    
+    var gardenName = childrenData.name;
     document.getElementById("header").innerHTML = gardenName;
     var allChildern = data.data.arrayValues;
     var mainDiv = document.getElementById("mainContent");
 
     if (userType == "2" || userType == 2) {
-         window.location = SERVER_URL + "/child.html?id=" + allChildern[0].kidId + "&name=" + allChildern[0].kidName + "&img=" + allChildern[0].imageLink;
+        window.location = SERVER_URL + "/child.html?id=" + allChildern[0].kidId + "&name=" + allChildern[0].kidName + "&img=" + allChildern[0].imageLink;
     } else {
         for (var i = 0; i < allChildern.length; i++) {
             var newChildDiv = document.createElement("div");
@@ -62,7 +64,13 @@ function addChildrenToPage(resData) {
             spacer.innerHTML = "&nbsp;";
             mainDiv.appendChild(spacer);
         }
+        
+        var footerDiv = document.createElement("div");
+        //footerDiv.className = "kid_header";
+        footerDiv.innerHTML = "<div style='text-align:center;'>All rights reserved to Go Toilet© Application</div>";
+        mainDiv.appendChild(footerDiv);
     }
+
     fixElementsApperance();
     setTimeout("fixElementsApperance();", 2500);
 }
@@ -73,27 +81,10 @@ function getKidFunction(id, name, img) {
     };
 }
 
-userType = getCookie("type");
-UID = getCookie("userid");
-if (UID < 0 || UID == "" || !UID) {
-    alert("ERROR no UID");
-} else {
-
-    getChildren();
-
-    $(document).ready(function() {
-        $("#my-menu").mmenu();
-        document.body.style = "height: " + $(document).height();
-        +"px";
-        $(window).on('resize', fixElementsApperance);
-        $(window).on("orientationchange", fixElementsApperance);
-
-        fixElementsApperance();
 
 
-    });
+getChildrenData();
 
-}
 
 
 

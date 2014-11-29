@@ -23,7 +23,7 @@ HEADER .burger_btn {overflow: hidden; text-indent: -9999px; height:55%; width: 2
 .kid_header .profile_picture { background-image: url("../images/Success-Kid.jpg"); background-position: 50% 50%; 
                                border-radius: 50%;  border: 1px solid #ffff71; -webkit-border-radius: 50%; -moz-border-radius: 50%;
                                width: 100px; height: 90%; margin-right: 4%;  top:50%; position: absolute;}
-.kid_header .profile_name { color:#fff; font: normal 8vh Arial; position: absolute; top:50%;}
+.kid_header .profile_name { color:#fff; font: normal 8vh Arial; position: absolute; top:50%; right:20%;}
 .kid_header .time_box { font-size: 3vh; position: absolute; top: 50%; left: 4%; text-align: left; line-height: 2vh;}
 .kid_header .time_box .edit { color: #201b12; font-size: 2.7vh; text-decoration: underline;}
 

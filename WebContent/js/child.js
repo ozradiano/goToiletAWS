@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+checkCookieForRedirect();
 
 var rowTemplate =   "<td>[DATE_TIME]</td>"+
                     "<td class='details'>"+
@@ -88,18 +89,9 @@ function fixElementsApperance() {
 
 
 $(document).ready(function() {
-    $("#my-menu").mmenu();
-    document.body.style = "height: " + $(document).height();
-    +"px";
-    $(window).on('resize', fixElementsApperance);
-    $(window).on("orientationchange", fixElementsApperance);
-    
-    
     if (userType == "2" || userType == 2) {
         $(".back_btn").hide();
     }
-
-    fixElementsApperance();
     
     document.getElementById("childName").innerHTML = decodeURI(QueryString.name);
     document.getElementById("profilePicture").src = "images/" + QueryString.img;

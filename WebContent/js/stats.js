@@ -3,6 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+checkCookieForRedirect();
+
+var allData = null;
 
 google.load("visualization", "1", {packages: ["corechart"]});
 
@@ -14,6 +17,26 @@ function getData(type) {
      };
     $.ajax({
         url: SERVER_URL + "/viewStatistics",
+        method: 'GET',
+        data: JSON.stringify(data),
+        success: function(resData) {
+            allData = JSON.parse(resData);
+            
+        },
+        error: function() {
+            alert("server error");
+        }
+    });
+}
+
+
+function getDataFirstTime() {
+    var data = {
+        kidId: QueryString.id,
+        daysFromToday: 30
+     };
+    $.ajax({
+        url: SERVER_URL + "/viewAllStatistics",
         method: 'GET',
         data: JSON.stringify(data),
         success: function(resData) {
@@ -37,18 +60,22 @@ function fixElementsApperance() {
 
 }
 
-function setTableData(serverData) {
+function setTableData() {
+    if (allData == null) {
+        setTimeout("setTableData()",1000);
+        return;
+    }
     
     google.setOnLoadCallback(drawChart);
     function drawChart() {
         var parsedData =  new Array();
         parsedData[0] = ['הצלחות', 'ימים'];
-        for (var i = 0; i < serverData.length; i++) {
-            parsedData[i+1] = [serverData[i].value, serverData[i].date];
+        for (var i = 0; i < allData.data.arrayValues.length; i++) {
+            parsedData[i+1] = [allData.data.arrayValues[i].value, allData.data.arrayValues[i].date];
         }
-        var data = google.visualization.arrayToDataTable(parsedData);
+        var tableDataObject = google.visualization.arrayToDataTable(parsedData);
 
-        var options = {
+        var tableOptions = {
             title: 'הצלחות',
             hAxis: {title: 'הצלחות', titleTextStyle: {color: '#333'}},
             vAxis: {title: 'ימים', titleTextStyle: {color: '#333'}, minValue: 0},
@@ -58,24 +85,15 @@ function setTableData(serverData) {
 
         var chart1 = new google.visualization.AreaChart(document.getElementById('chart_div1'));
         //var chart2 = new google.visualization.AreaChart(document.getElementById('chart_div2'));
-        chart1.draw(data, options);
+        chart1.draw(tableDataObject, tableOptions);
         //chart2.draw(data, options);
     }
 }
 
+getDataFirstTime();
 
 $(document).ready(function() {
-    getData('successes');
-    
-    $("#my-menu").mmenu();
-    document.body.style = "height: " + $(document).height();
-    $(window).on('resize', fixElementsApperance);
-    $(window).on("orientationchange", fixElementsApperance);
-
-    fixElementsApperance();
-    
-
-
+    setTableData();
     //alert(document.getElementById("childName") + ":::" + QueryString.name);
     document.getElementById("childName").innerHTML = decodeURI(QueryString.name);
     document.getElementById("profilePicture").src = "images/" + QueryString.img;

@@ -4,11 +4,7 @@
  * and open the template in the editor.
  */
 
-
-
-
-var UID = 0;
-var KIDID = 0;
+checkCookieForRedirect();
 
 
 var formValues = [];

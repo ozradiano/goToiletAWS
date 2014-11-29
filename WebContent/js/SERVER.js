@@ -4,4 +4,4 @@
  * and open the template in the editor.
  */
 
-var SERVER_URL = "http://gotoiletapp.com/"
+var SERVER_URL = "http://localhost:8383/WebContent"

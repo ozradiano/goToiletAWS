@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 
+var UID = -1;
+var userType = -1;
+
 
 var QueryString = function() {
     // This function is anonymous, is executed immediately and 
@@ -47,6 +50,7 @@ function getCookie(cname) {
         if (c.indexOf(name) != -1)
             return c.substring(name.length, c.length);
     }
+    
     return "";
 }
 
@@ -58,3 +62,35 @@ function deleteCookies() {
     deleteCookie("userid");
     deleteCookie("type");
 }
+
+
+userType = getCookie("type");
+UID = getCookie("userid");
+
+function noCookieRedirect(location) {
+    if (location == null) {
+        window.location = SERVER_URL + "/login.html";
+    } else {
+        window.location = SERVER_URL + location;
+    }
+}
+
+
+
+function checkCookieForRedirect(location) {
+    if (UID < 0 || UID == "" || !UID) {
+        noCookieRedirect(location);
+        throw new Error('No Cookie');
+    }
+}
+
+
+$(document).ready(function() {
+    addChildrenToPage();
+    $("#my-menu").mmenu();
+    document.body.style = "height: " + $(document).height();+"px";
+    $(window).on('resize', fixElementsApperance);
+    $(window).on("orientationchange", fixElementsApperance);
+
+    fixElementsApperance();
+});
