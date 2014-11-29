@@ -60,7 +60,7 @@ function buildJSONObject() {
             {independenceStage: "handsDry", assistantLevel: formValues["radio-wipe-hands"]},
             {independenceStage: "pantsDown", assistantLevel: formValues["radio-drop-pants"]}
         ],
-        comments: $("#comment").value(),
+        comments: $("#comment").val(),
         kidIsInitiator: formValues["radio-kid-init"],
         isKaki: formValues["action-poo"],
         isPipi: formValues["action-pee"]
