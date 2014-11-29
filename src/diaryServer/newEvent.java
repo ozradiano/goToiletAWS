@@ -2,6 +2,8 @@ package diaryServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -13,6 +15,9 @@ import org.json.JSONObject;
 import org.json.JSONWriter;
 
 import dataTypes.EventData;
+import dataTypes.IndependenceStages;
+import enums.EAssistantLevel;
+import enums.EIndependenceStages;
 
 /**
  * REQUEST STRUCTUR FOR NEW EVENT IS DONE WHEN ASKING FOR /newEvent (url page)
@@ -78,18 +83,25 @@ public class newEvent extends HttpServlet {
 			e.printStackTrace();
 		}
 		System.out.println("parsing the input event");
-		// independence stages is not handlet meanwhile! maybe next version
+		// independence stages is not handled meanwhile! maybe next version
 		EventData newEvent = new EventData();
 		newEvent.setKidId(currentEventJson.getString("kidID"));
 		newEvent.setComments(currentEventJson.getString("comments"));
 		newEvent.setDateTime(currentEventJson.getString("dateTime"));
+		newEvent.setSuccessResult(currentEventJson.getString("successResult"));
 		newEvent.setInsertingUserId(currentEventJson
 				.getString("insertingUserId"));
+		newEvent.setKidIsInitiator(currentEventJson.getBoolean("kidIsInitiator"));
+		System.out.println("Independence strages: " + currentEventJson.getJSONArray("createdIndependenceStages"));
+		List<IndependenceStages> independenceStages = new ArrayList<>();
+		independenceStages.add(new IndependenceStages(EIndependenceStages.cleanAss, EAssistantLevel.fullHelp));
+		independenceStages.add(new IndependenceStages(EIndependenceStages.doorClose, EAssistantLevel.noHelp));
+		newEvent.setCreatedIndependenceStages(independenceStages);
 		newEvent.setIsKaki(currentEventJson.getBoolean("isKaki"));
 		newEvent.setIsPipi(currentEventJson.getBoolean("isPipi"));
 
 		// temp is never used, we don't use the 'entry id'
-		int temp = dbManager.getInstance().insertNewEvent(newEvent);
+		dbManager.getInstance().insertNewEvent(newEvent);
 
 		// pulls events from last 24 for the kid
 		List<EventData> kidEvents = dbManager.getInstance().getEventsForKid(
