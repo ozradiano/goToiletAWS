@@ -24,7 +24,7 @@ formValues["radio-wash-hands"] = "fullHelp";
 formValues["radio-wipe-hands"] = "fullHelp";
 
 
-function getTime() {
+function getAndFixTime() {
     $.ajax({
         url: SERVER_URL + "/getTime",
         method: 'GET',
