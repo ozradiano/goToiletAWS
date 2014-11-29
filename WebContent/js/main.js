@@ -44,7 +44,7 @@ function addChildrenToPage() {
     
     var gardenName = childrenData.name;
     document.getElementById("header").innerHTML = gardenName;
-    var allChildern = data.data.arrayValues;
+    var allChildern = childrenData.data.arrayValues;
     var mainDiv = document.getElementById("mainContent");
 
     if (userType == "2" || userType == 2) {
