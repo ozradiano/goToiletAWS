@@ -38,7 +38,7 @@ function fixElementsApperance() {
 
 function addChildrenToPage() {
     if (childrenData == null) {
-         setTimeput("addChildrenToPage()",1000); 
+         setTimeout("addChildrenToPage()",1000); 
          return;
     }
     
