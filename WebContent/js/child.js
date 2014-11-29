@@ -83,7 +83,7 @@ function fixElementsApperance() {
     $(".burger_btn").css("margin-top", "-" + ($(".burger_btn").height() / 2) + "px");
     $(".profile_picture").css("margin-top", "-" + ($(".profile_picture").height() / 2) + "px");
     $(".profile_name").css("margin-top", "-" + ($(".profile_name").height() / 2) + "px");
-    $(".profile_name").css("right", (Math.ceil($(".profile_picture").width() * 1.7)) + "px");
+    //$(".profile_name").css("right", (Math.ceil($(".profile_picture").width() * 1.7)) + "px");
 
 }
 

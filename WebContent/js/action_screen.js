@@ -29,7 +29,12 @@ function getTime() {
         url: SERVER_URL + "/getTime",
         method: 'GET',
         success: function(resData) {
-            fixTime(resData);
+            var data = JSON.parse(resData);
+            var time = data.hour;
+            var date = data.date;
+
+            $("#currentTime").val(time);
+            $("#currentDate").val(date);
         },
         error: function() {
             alert("server error");
@@ -37,22 +42,12 @@ function getTime() {
     });
 }
 
-
-function fixTime(resData) {
-    var data = JSON.parse(resData);
-    var time = data.time;
-    var date = data.date;
-    
-    $("#currentTime").val(time);
-    $("#currentDate").val(date);
-}
-
 function buildJSONObject() {
     var obj = {
-        insertingUserId: "1",
+        insertingUserId: UID,
         kidID: QueryString.id,
-        dateTime: "2004-02-01 00:00:00",
-        successResult: ""+formValues["radio-status"],
+        dateTime: $("#currentTime").val() + " " + $("#currentDate").val(),
+        successResult: formValues["radio-status"],
         createdIndependenceStages: [
             {independenceStage: "pantsUp", assistantLevel: formValues["radio-lift-pants"]},
             {independenceStage: "pantiesDown", assistantLevel: formValues["radio-drop-underware"]},
@@ -67,24 +62,13 @@ function buildJSONObject() {
         ],
         comments: document.getElementById("comment").value,
         kidIsInitiator: formValues["radio-kid-init"],
-        isKaki: ""+formValues["action-poo"],
-        isPipi: ""+formValues["action-pee"]
+        isKaki: formValues["action-poo"],
+        isPipi: formValues["action-pee"]
     };
     return obj;
 }
 
-
-$(document).ready(function() {
-    getTime();
-    $("#my-menu").mmenu();
-    document.body.style = "height: " + $(document).height();
-    +"px";
-    $(window).on('resize', fixElementsApperance);
-    $(window).on("orientationchange", fixElementsApperance);
-
-
-
-    function fixElementsApperance() {
+function fixElementsApperance() {
         
         $("#profilePicture").width($("#profilePicture").height());
         $(".time_box").css("margin-top", "-" + ($(".time_box").height() / 2) + "px");
@@ -102,7 +86,11 @@ $(document).ready(function() {
             $("textarea").html("");
         });
     }
+    
+$(document).ready(function() {
 
+    getAndFixTime();
+    
     function setRadios() {
         var allCB = document.getElementsByName("checkbox");
         for (var i = 0; i < allCB.length; i++) {
