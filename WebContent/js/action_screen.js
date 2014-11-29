@@ -33,8 +33,8 @@ function getAndFixTime() {
             var time = data.hour;
             var date = data.date;
 
-            $("#currentTime").val(time);
-            $("#currentDate").val(date);
+            $("#currentTime").html(time);
+            $("#currentDate").html(date);
         },
         error: function() {
             alert("server error");
@@ -46,7 +46,7 @@ function buildJSONObject() {
     var obj = {
         insertingUserId: UID,
         kidID: QueryString.id,
-        dateTime: $("#currentTime").val() + " " + $("#currentDate").val(),
+        dateTime: $("#currentDate").val() + " " + $("#currentTime").val(),
         successResult: formValues["radio-status"],
         createdIndependenceStages: [
             {independenceStage: "pantsUp", assistantLevel: formValues["radio-lift-pants"]},
@@ -60,7 +60,7 @@ function buildJSONObject() {
             {independenceStage: "handsDry", assistantLevel: formValues["radio-wipe-hands"]},
             {independenceStage: "pantsDown", assistantLevel: formValues["radio-drop-pants"]}
         ],
-        comments: document.getElementById("comment").value,
+        comments: $("#comment").value(),
         kidIsInitiator: formValues["radio-kid-init"],
         isKaki: formValues["action-poo"],
         isPipi: formValues["action-pee"]
