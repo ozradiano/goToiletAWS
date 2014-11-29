@@ -81,9 +81,11 @@ function getKidFunction(id, name, img) {
     };
 }
 
-
-
 getChildrenData();
+
+$(document).ready(function() {
+    addChildrenToPage();
+});
 
 
 

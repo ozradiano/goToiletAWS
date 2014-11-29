@@ -86,7 +86,6 @@ function checkCookieForRedirect(location) {
 
 
 $(document).ready(function() {
-    addChildrenToPage();
     $("#my-menu").mmenu();
     document.body.style = "height: " + $(document).height();+"px";
     $(window).on('resize', fixElementsApperance);
