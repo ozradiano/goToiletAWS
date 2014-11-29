@@ -46,7 +46,7 @@ function buildJSONObject() {
     var obj = {
         insertingUserId: UID,
         kidID: QueryString.id,
-        dateTime: $("#currentDate").val() + " " + $("#currentTime").val(),
+        dateTime: $("#currentDate").html() + " " + $("#currentTime").html(),
         successResult: formValues["radio-status"],
         createdIndependenceStages: [
             {independenceStage: "pantsUp", assistantLevel: formValues["radio-lift-pants"]},
