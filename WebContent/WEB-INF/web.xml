@@ -60,17 +60,6 @@
 		<url-pattern>/viewStatistics</url-pattern>
 	</servlet-mapping>
 	
-	
-				<servlet>
-		<servlet-name>AllStatistics</servlet-name>
-		<servlet-class>diaryServer.viewAllStatistics</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>AllStatistics</servlet-name>
-		<url-pattern>/viewSAlltatistics</url-pattern>
-	</servlet-mapping>
-	
 				<servlet>
 		<servlet-name>Time</servlet-name>
 		<servlet-class>diaryServer.getTime</servlet-class>

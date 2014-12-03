@@ -210,15 +210,16 @@ public class dbManager {
 				nextEventIdForReal = nextEventId.getInt("Total") + 1;
 			}
 			selectUsersStatement.close();
-			SimpleDateFormat sdfForDB = new SimpleDateFormat(
-					"yyyy-MM-dd hh:mm:00"), sdfFromGui = new SimpleDateFormat(
-					"MM.dd.yyyy HH:mm");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:00");
 
 			insertStatement = insertConnectionObject
 					.prepareStatement(Helpers.INSERT_NEW_EVENT_QUERY);
 			insertStatement.setString(1, "" + nextEventIdForReal);
-			insertStatement.setString(2,
-					sdfForDB.format(sdfFromGui.parse(newEvent.getDateTime())));
+			insertStatement.setString(
+					2,
+					(newEvent.getDateTime().isEmpty() ? sdf.format(
+							Calendar.getInstance().getTime()).toString()
+							: newEvent.getDateTime()));
 			insertStatement.setString(3, newEvent.getInsertingUserId());
 			insertStatement.setString(4, newEvent.getKidId());
 			insertStatement.setString(5,
@@ -231,8 +232,6 @@ public class dbManager {
 			insertStatement.setString(9, newEvent.getIsKaki() == true ? "1"
 					: "0");
 			insertStatement.setString(10, newEvent.getSuccessResult());
-			insertStatement.setString(11,
-					sdfForDB.format(Calendar.getInstance().getTime()));
 
 			int retVal = insertStatement.executeUpdate();
 			Logger.getInstance().Log(ELogLevel.debug, CLASS_NAME, methodName,
@@ -245,7 +244,6 @@ public class dbManager {
 					"Error occured during inserting new event. Event data: "
 							+ newEvent.toString() + ", error: "
 							+ ex.getMessage());
-			ex.printStackTrace();
 			nextEventIdForReal = -1;
 		} finally {
 			if (selectUsersStatement != null) {
@@ -352,16 +350,18 @@ public class dbManager {
 						}
 					}
 				}
-				retVal.add(new EventData(returnedEvents
-						.getString("client_date_time"), returnedEvents
-						.getString("inserting_user_id"), returnedEvents
-						.getString("kid_id"), stages, returnedEvents.getString(
-						"kid_is_initiator").equals("1") ? true : false,
-						returnedEvents.getString("comments"),
+				retVal.add(new EventData(
+						returnedEvents.getString("date_time"),
+						returnedEvents.getString("inserting_user_id"),
+						returnedEvents.getString("kid_id"),
+						stages,
+						returnedEvents.getString("kid_is_initiator").equals("1") ? true
+								: false, returnedEvents.getString("comments"),
 						returnedEvents.getString("isKaki").equals("1") ? true
-								: false, returnedEvents.getString("isPipi")
-								.equals("1") ? true : false, returnedEvents
-								.getString("walkStatus")));
+								: false,
+						returnedEvents.getString("isPipi").equals("1") ? true
+								: false, 
+						returnedEvents.getString("walkStatus")));
 			}
 			Logger.getInstance().Log(ELogLevel.debug, CLASS_NAME, methodName,
 					"Done.");
@@ -463,7 +463,7 @@ public class dbManager {
 	 */
 	public List<Statistics> getStatisticsForKidId(String kidId,
 			EStatisticType statisticType, int daysFromToday) {
-
+		
 		List<Statistics> retVal = new ArrayList<Statistics>();
 		String methodName = "getStatisticForKidId";
 
@@ -484,11 +484,10 @@ public class dbManager {
 				for (EventData currentEvent : eventsForKid) {
 					int success = Integer.parseInt(currentEvent
 							.getSuccessResult());
-
-					// only in case of real failure
-					if (currentEvent.getIsKaki() || currentEvent.getIsPipi()) {
-						successRetVal.add(
-								currentEvent.getDateTime().split(" ")[0],
+					
+					//only in case of real failure
+					if(currentEvent.getIsKaki() || currentEvent.getIsPipi()) {
+						successRetVal.add(currentEvent.getDateTime().split(" ")[0],
 								success == 1 ? 1 : 0, success == 0 ? 1 : 0);
 					}
 				}
@@ -498,9 +497,8 @@ public class dbManager {
 				for (EventData currentEvent : eventsForKid) {
 					int success = Integer.parseInt(currentEvent
 							.getSuccessResult());
-
-					// no matter if there was a success or a failure we need to
-					// count it
+					
+					//no matter if there was a success or a failure we need to count it
 					successRetVal.add(currentEvent.getDateTime().split(" ")[0],
 							success == 1 ? 1 : 0, success == 0 ? 1 : 0);
 				}

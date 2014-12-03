@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 checkCookieForRedirect();
-
+var pageHasLoaded = false;
 var kidTemplate = '<img src="[IMG_SRC]" class="profile_picture v_align background_cover"/>' +
         '<div class="profile_name v_align">[NAME_OF_CHILD]</div>';
 
@@ -20,6 +20,7 @@ function getChildrenData() {
         data: JSON.stringify(data),
         success: function(resData) {
             childrenData = JSON.parse(resData);
+            addChildrenToPage();
         },
         error: function() {
             alert("server error");
@@ -37,7 +38,7 @@ function fixElementsApperance() {
 }
 
 function addChildrenToPage() {
-    if (childrenData == null) {
+    if (!pageHasLoaded) {
          setTimeout("addChildrenToPage()",1000); 
          return;
     }
@@ -84,7 +85,7 @@ function getKidFunction(id, name, img) {
 getChildrenData();
 
 $(document).ready(function() {
-    addChildrenToPage();
+    pageHasLoaded = true;
 });
 
 

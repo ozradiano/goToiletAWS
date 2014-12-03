@@ -6,6 +6,7 @@ public class Helpers {
 	public static final String GET_KIDS_QUERY = "SELECT * FROM kids LIMIT 300";
 	public static final String GET_EVENTS_FOR_KID_QUERY = "SELECT * FROM EventsLog WHERE kid_id=? AND client_date_time > ? LIMIT 800";
 	public final static String INSERT_NEW_EVENT_QUERY = "INSERT INTO EventsLog VALUES (?,?,?,?,?,?,?,?,?,?,?);";
+	public final static String INSERT_NEW_LOG_LINE = "INSERT INTO logger VALUES (?,?,?)";
 //	public final static String ID_EVENTS_LOG = "%%ID_EVENTS_LOG%%";
 //	public final static String DATE_TIME = "%%DATE_TIME%%";
 //	public final static String INSERTING_USER_ID = "%%INSERTING_USER_ID%%";
