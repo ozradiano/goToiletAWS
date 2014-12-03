@@ -60,3 +60,5 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 /WebContent/nbproject/private/
+*.prefs
+*.properties
