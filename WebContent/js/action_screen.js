@@ -68,24 +68,23 @@ function buildJSONObject() {
     return obj;
 }
 
-function fixElementsApperance() {
-        
-        $("#profilePicture").width($("#profilePicture").height());
-        $(".time_box").css("margin-top", "-" + ($(".time_box").height() / 2) + "px");
-        $(".burger_btn").width($(".burger_btn").height() * 1.91);
-        $(".burger_btn").css("margin-top", "-" + ($(".burger_btn").height() / 2) + "px");
-        $(".pee").width($(".burger_btn").height() * 1);
-        $(".poo").width($(".burger_btn").height() * 1.30);
-        $(".profile_picture").css("margin-top", "-" + ($(".profile_picture").height() / 2) + "px");
-        $(".profile_name").css("margin-top", "-" + ($(".profile_name").height() / 2) + "px");
-        $(".profile_name").css("right", (Math.ceil($(".profile_picture").width() * 1.7)) + "px");
-        $("[name=checkbox]").width($("[name=checkbox]").height());
-        $(".radio_btn").width($(".radio_btn").height());
-        $(".radio_btn_small").width($(".radio_btn_small").height());
-        $("textarea").click(function() {
-            $("textarea").html("");
-        });
-    }
+function fixElementsApperance() {     
+    $("#profilePicture").width($("#profilePicture").height());
+    $(".time_box").css("margin-top", "-" + ($(".time_box").height() / 2) + "px");
+    $(".burger_btn").width($(".burger_btn").height() * 1.91);
+    $(".burger_btn").css("margin-top", "-" + ($(".burger_btn").height() / 2) + "px");
+    $(".pee").width($(".burger_btn").height() * 1);
+    $(".poo").width($(".burger_btn").height() * 1.30);
+    $(".profile_picture").css("margin-top", "-" + ($(".profile_picture").height() / 2) + "px");
+    $(".profile_name").css("margin-top", "-" + ($(".profile_name").height() / 2) + "px");
+    $(".profile_name").css("right", (Math.ceil($(".profile_picture").width() * 1.7)) + "px");
+    $("[name=checkbox]").width($("[name=checkbox]").height());
+    $(".radio_btn").width($(".radio_btn").height());
+    $(".radio_btn_small").width($(".radio_btn_small").height());
+    $("textarea").click(function() {
+        $("textarea").html("");
+    });
+}
     
 $(document).ready(function() {
 
@@ -101,9 +100,7 @@ $(document).ready(function() {
             allCB[i].onclick = getCBClickFunction(id);
         }
     }
-
-
-
+    
     function setRadios() {
         var allRadios = document.getElementsByClassName("radio_btn");
         for (var i = 0; i < allRadios.length; i++) {

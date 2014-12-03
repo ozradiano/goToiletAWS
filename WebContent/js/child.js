@@ -5,6 +5,8 @@
  */
 checkCookieForRedirect();
 
+var pageLoaded = false;
+
 var rowTemplate =   "<td>[DATE_TIME]</td>"+
                     "<td class='details'>"+
                         "<div class='[INIT]'>הליכה יזומה</div>"+
@@ -13,17 +15,21 @@ var rowTemplate =   "<td>[DATE_TIME]</td>"+
                     "</td>"+
                     "<td class='sign'>[PIPI]</td>"+
                     "<td class='sign'>[KAKI]</td>";
+            
+var childData = null;
 
-function getChildren() {
+function getChildActivityByDays(days) {
     var data = {
-        kidId: QueryString.id
+        kidId: QueryString.id,
+        daysFromToday: days
     };
     $.ajax({
         url: SERVER_URL + "/viewKid",
         method: 'POST',
         data: JSON.stringify(data),
         success: function(resData) {
-            addChildInfo(resData);
+            childData = JSON.parse(resData);
+            addChildInfo();
         },
         error: function() {
             alert("server error");
@@ -34,11 +40,15 @@ function getChildren() {
 
 var userType = getCookie("type");
 
-getChildren();
+getChildActivityByDays(1);
 
-function addChildInfo(resData) {
-    var data = JSON.parse(resData);
-    var rows = data.data.arrayValues;
+function addChildInfo() {
+    if (!pageLoaded) {
+        setTimeout("addChildInfo()",1000);
+        return;
+    }
+    
+    var rows = childData.data.arrayValues;
     var mainTable = document.getElementById("mainTable");
     for (var i = 0; i < rows.length; i++) {
         var tr = document.createElement("tr");
@@ -84,13 +94,30 @@ function fixElementsApperance() {
     $(".profile_picture").css("margin-top", "-" + ($(".profile_picture").height() / 2) + "px");
     $(".profile_name").css("margin-top", "-" + ($(".profile_name").height() / 2) + "px");
     //$(".profile_name").css("right", (Math.ceil($(".profile_picture").width() * 1.7)) + "px");
+    $(".radio_btn").width($(".radio_btn").height());
+    $(".radio_btn_small").width($(".radio_btn_small").height());
 
 }
 
+function refreshList(days) {
+    var mainTable = document.getElementById("mainTable");
+    var allTr = mainTable.getElementsByTagName("tr");
+    for (var i = 1; i < allTr.length; i++) {
+        mainTable.removeChild(allTr[i]);
+    }
+    
+    getChildActivityByDays(days);
+    
+}
 
 $(document).ready(function() {
-    if (userType == "2" || userType == 2) {
-        $(".back_btn").hide();
+    pageLoaded = true;
+    function getRadioClickFunction(name, id) {
+        return function() {
+            $('[name="' + name + '"]').removeClass("radio_on").addClass("radio_off");
+            $('#' + id).removeClass("radio_off").addClass("radio_on");
+            refreshList(document.getElementById(id).getAttribute("value"));
+        };
     }
     
     document.getElementById("childName").innerHTML = decodeURI(QueryString.name);
@@ -98,7 +125,17 @@ $(document).ready(function() {
     document.getElementById("newEventLink").href = "add-event.html?id=" + QueryString.id + "&name=" +  QueryString.name + "&img=" +  QueryString.img;
     document.getElementById("statsLink").href = "stats.html?id=" + QueryString.id + "&name=" +  QueryString.name + "&img=" +  QueryString.img;
     
-    
+    var allRadios = document.getElementsByClassName("radio_btn");
+    for (var i = 0; i < allRadios.length; i++) {
+        var name = allRadios[i].getAttribute("name");
+        var id = allRadios[i].id;
+        //$("#"+id).bind('mousedown touchstart', getRadioDownFunction(id));
+        //$("#"+id).bind('mouseup touchstart', getRadioDownFunction(id));
+        //.on('click touchstart'
+        allRadios[i].onclick = getRadioClickFunction(name, id);
+    }
+        
+    addChildInfo();
 });
 
 
