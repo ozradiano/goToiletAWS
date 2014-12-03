@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONWriter;
 
@@ -18,16 +19,14 @@ import dataTypes.EventData;
 import dataTypes.IndependenceStages;
 import enums.EAssistantLevel;
 import enums.EIndependenceStages;
+import enums.ELogLevel;
 
 /**
  * REQUEST STRUCTUR FOR NEW EVENT IS DONE WHEN ASKING FOR /newEvent (url page)
- * STRCUTRE: (key=value)
- * 	"KidID" = "12345"(string)
- *  "comments" = "bla"(string)
- *  "dateTime" = "11.11.11"(string)
- *  "isKaki" = True/False (boolean)
- *  "isPipi" = True/false(boolean)
-
+ * STRCUTRE: (key=value) "KidID" = "12345"(string) "comments" = "bla"(string)
+ * "dateTime" = "11.11.11"(string) "isKaki" = True/False (boolean) "isPipi" =
+ * True/false(boolean)
+ * 
  * @author ilaisit
  *
  */
@@ -70,8 +69,7 @@ public class newEvent extends HttpServlet {
 
 	private void parseRequest(HttpServletRequest request,
 			HttpServletResponse response) {
-		System.out.println("making now new kid event");
-		System.out.println("Trying to view kid");
+		Logger.getInstance().Log(ELogLevel.debug, "newEvent", "parseRequest", "Trying to Create new event");
 		String jsonReq = extractJsonFromRequest(request);
 		JSONObject currentEventJson = new JSONObject(jsonReq);
 
@@ -82,7 +80,6 @@ public class newEvent extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("parsing the input event");
 		// independence stages is not handled meanwhile! maybe next version
 		EventData newEvent = new EventData();
 		newEvent.setKidId(currentEventJson.getString("kidID"));
@@ -92,17 +89,29 @@ public class newEvent extends HttpServlet {
 		newEvent.setInsertingUserId(currentEventJson
 				.getString("insertingUserId"));
 		newEvent.setKidIsInitiator(currentEventJson.getBoolean("kidIsInitiator"));
-		System.out.println("Independence strages: " + currentEventJson.getJSONArray("createdIndependenceStages"));
-		List<IndependenceStages> independenceStages = new ArrayList<>();
-		independenceStages.add(new IndependenceStages(EIndependenceStages.cleanAss, EAssistantLevel.fullHelp));
-		independenceStages.add(new IndependenceStages(EIndependenceStages.doorClose, EAssistantLevel.noHelp));
-		newEvent.setCreatedIndependenceStages(independenceStages);
+		JSONArray independenceJsonArray = currentEventJson.getJSONArray("createdIndependenceStages");
+		List<IndependenceStages> independenceStagesList = new ArrayList<>();
+		
+		for (int i = 0; i < independenceJsonArray.length(); i++) {
+		    JSONObject c = independenceJsonArray.getJSONObject(i);
+		   
+		    independenceStagesList.add(new IndependenceStages((EIndependenceStages)
+		    		Enum.valueOf(EIndependenceStages.class, 
+		    				c.getString("independenceStage")),
+		    				(EAssistantLevel)Enum.valueOf(EAssistantLevel.class, 
+				    				c.getString("assistantLevel"))));
+		    
+		}
+		
+//		independenceStages.add(new IndependenceStages(EIndependenceStages.cleanAss, EAssistantLevel.fullHelp));
+//		independenceStages.add(new IndependenceStages(EIndependenceStages.doorClose, EAssistantLevel.noHelp));
+		newEvent.setCreatedIndependenceStages(independenceStagesList);
 		newEvent.setIsKaki(currentEventJson.getBoolean("isKaki"));
 		newEvent.setIsPipi(currentEventJson.getBoolean("isPipi"));
 
 		// temp is never used, we don't use the 'entry id'
-		dbManager.getInstance().insertNewEvent(newEvent);
-
+		int temp = dbManager.getInstance().insertNewEvent(newEvent);
+		Logger.getInstance().Log(ELogLevel.debug, "newEvent", "insertNewEvent", "Insertion Status from DB is: "+ temp);
 		// pulls events from last 24 for the kid
 		List<EventData> kidEvents = dbManager.getInstance().getEventsForKid(
 				newEvent.getKidId(), 1);

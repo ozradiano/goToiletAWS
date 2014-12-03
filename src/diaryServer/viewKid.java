@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import org.json.JSONWriter;
 
 import dataTypes.EventData;
+import enums.ELogLevel;
 /**
  * the request must contain kidID and and daysFromToday
  * @author ilaisit
@@ -53,13 +54,11 @@ public class viewKid extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("trYYY view kid");
 		parseRequest(req, resp);
 	}
 
 	private void parseRequest(HttpServletRequest request,
 			HttpServletResponse response) {
-		System.out.println("Trying to view kid");
 		String jsonReq = extractJsonFromRequest(request);
 		JSONObject currentKid = new JSONObject(jsonReq);
 
@@ -70,16 +69,16 @@ public class viewKid extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("parsing kid events");
+		Logger.getInstance().Log(ELogLevel.debug, "viewKid", "parseRequest", "Parsing view kid request");
+
 		// The KEY received from CLIENT is "UserID". expecting to receive the
 		// userID = KidID
 		String kidID = currentKid.getString("kidId");
 		//recive value from client p - that says how many days ago he wants data for the kids events
 		//int daysFromToday = currentKid.getInt("daysFromToday");
 		List<EventData> kidEvents = dbManager.getInstance().getEventsForKid(kidID, 1);
-		System.out.println("there are ");
-		System.out.println(kidEvents.size());
-		System.out.println("events for this kid");
+		Logger.getInstance().Log(ELogLevel.debug, "viewKid", "parseRequest", "there are " + kidEvents.size() + " event for this kid in the last day");
+
 		
 		JSONObject responseDetailsJson = new JSONObject();
 		JSONArray jsonArray = new JSONArray();

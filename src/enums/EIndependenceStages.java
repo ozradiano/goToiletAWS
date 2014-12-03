@@ -2,10 +2,10 @@ package enums;
 
 
 public enum EIndependenceStages {
-	pantsDown,
-	pantsUp,
+	pantsDown, //ok
+	pantsUp, //ok
 	pantiesDown,
-	pantiedUp,
+	pantiesUp,
 	doorOpen,
 	doorClose,
 	handsWashed,
