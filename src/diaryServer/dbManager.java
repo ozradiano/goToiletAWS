@@ -213,12 +213,13 @@ public class dbManager {
 			selectUsersStatement.close();
 			SimpleDateFormat sdfForDB = new SimpleDateFormat(
 					"yyyy-MM-dd hh:mm:00"), sdfFromGui = new SimpleDateFormat(
-					"dd.MM.yyyy HH:MM");
+					"MM.dd.yyyy HH:mm");
 
 			insertStatement = insertConnectionObject
 					.prepareStatement(Helpers.INSERT_NEW_EVENT_QUERY);
 			insertStatement.setString(1, "" + nextEventIdForReal);
-			insertStatement.setString(2, "2014-11-29 10:00:00");
+			insertStatement.setString(2,
+					sdfForDB.format(sdfFromGui.parse(newEvent.getDateTime())));
 			insertStatement.setString(3, newEvent.getInsertingUserId());
 			insertStatement.setString(4, newEvent.getKidId());
 			insertStatement.setString(5,
@@ -231,7 +232,8 @@ public class dbManager {
 			insertStatement.setString(9, newEvent.getIsKaki() == true ? "1"
 					: "0");
 			insertStatement.setString(10, newEvent.getSuccessResult());
-			insertStatement.setString(11, sdfForDB.format(Calendar.getInstance().getTime()));
+			insertStatement.setString(11,
+					sdfForDB.format(Calendar.getInstance().getTime()));
 
 			int retVal = insertStatement.executeUpdate();
 			Logger.getInstance().Log(ELogLevel.debug, CLASS_NAME, methodName,
@@ -351,12 +353,12 @@ public class dbManager {
 						}
 					}
 				}
-				retVal.add(new EventData(returnedEvents.getString("client_date_time"),
-						returnedEvents.getString("inserting_user_id"),
-						returnedEvents.getString("kid_id"), stages,
-						returnedEvents.getString("kid_is_initiator")
-								.equals("1") ? true : false, returnedEvents
-								.getString("comments"),
+				retVal.add(new EventData(returnedEvents
+						.getString("client_date_time"), returnedEvents
+						.getString("inserting_user_id"), returnedEvents
+						.getString("kid_id"), stages, returnedEvents.getString(
+						"kid_is_initiator").equals("1") ? true : false,
+						returnedEvents.getString("comments"),
 						returnedEvents.getString("isKaki").equals("1") ? true
 								: false, returnedEvents.getString("isPipi")
 								.equals("1") ? true : false, returnedEvents
