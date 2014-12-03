@@ -31,10 +31,11 @@ and open the template in the editor.
             .main_table TD.details DIV.cb { background-image: url('images/cb.png');}
             .main_table TD.details DIV.cb_v { background-image: url('images/cb_v.png'); }
             .main_table TD.sign { font-size: 5vh }
-            .big_line A, .big_line A:visited, .big_line A:active { color: #565757; width: 23%; background-repeat: no-repeat; background-position: 100% 50%; display: inline-block; font: normal 4vh Arial; padding-right: 5%; background-size: contain; -webkit-background-size: contain;}
+            .big_line .label, .big_line A, .big_line A:visited, .big_line A:active { color: #565757; width: 16.5%; background-repeat: no-repeat; background-position: 100% 50%; display: inline-block; font: normal 4vh Arial; padding-right: 5%; background-size: contain; -webkit-background-size: contain;}
+            //.big_line .label { width: auto; }
             .big_line A.new_event { background-image: url('images/plus.png'); }
             .big_line A.stats { background-image: url('images/stats.png'); }
-            .big_line A.history { background-image: url('images/history.png'); }
+            .big_line .history { background-image: url('images/history.png'); }
             
             .back_btn
         </style>
@@ -58,7 +59,10 @@ and open the template in the editor.
             <div class="big_line">
                 <a id="newEventLink" href='ad-event.html' class='new_event'>דיווח חדש</a>
                 <a id="statsLink" href='' class='stats'>סטטיסטיקה</a>
-                <!--a href='' class='history'>תצוגה שבועית</a-->    
+                <span href='' class='label history'>ימים להצגה:</span>    
+                <div class="radio_btn radio_on" name="radio-status" id="status-sucsess" value="1"></div><span class="text">1</span>
+                <div class="radio_btn radio_off" name="radio-status" id="status-miss" value="7"></div><span class="text">7</span>
+                <div class="radio_btn radio_off" name="radio-status" id="status-irelevent" value="30"></div><span class="text">30</span>
             </div>
             
             <br/>

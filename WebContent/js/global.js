@@ -79,8 +79,8 @@ function noCookieRedirect(location) {
 
 function checkCookieForRedirect(location) {
     if (UID < 0 || UID == "" || !UID) {
-        noCookieRedirect(location);
-        throw new Error('No Cookie');
+        //noCookieRedirect(location);
+        //throw new Error('No Cookie');
     }
 }
 
