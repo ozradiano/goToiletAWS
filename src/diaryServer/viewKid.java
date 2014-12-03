@@ -75,8 +75,8 @@ public class viewKid extends HttpServlet {
 		// userID = KidID
 		String kidID = currentKid.getString("kidId");
 		//recive value from client p - that says how many days ago he wants data for the kids events
-		//int daysFromToday = currentKid.getInt("daysFromToday");
-		List<EventData> kidEvents = dbManager.getInstance().getEventsForKid(kidID, 1);
+		int daysFromToday = currentKid.getInt("daysFromToday");
+		List<EventData> kidEvents = dbManager.getInstance().getEventsForKid(kidID, daysFromToday);
 		Logger.getInstance().Log(ELogLevel.debug, "viewKid", "parseRequest", "there are " + kidEvents.size() + " event for this kid in the last day");
 
 		

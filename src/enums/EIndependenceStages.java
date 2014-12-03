@@ -9,6 +9,7 @@ public enum EIndependenceStages {
 	doorOpen,
 	doorClose,
 	handsWashed,
-	cleanAss,
+	handsDry,
 	flushWater,
+	wipe,
 }
